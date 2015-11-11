@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE attributes PUBLIC "-//NetBeans//DTD DefaultAttributes 1.0//EN" "http://www.netbeans.org/dtds/attributes-1_0.dtd">
+<attributes version="1.0">
+    <fileobject name="QTCycle.java">
+        <attr name="class_dependency_javax.swing.event.ChangeListener" stringvalue="QTCycle"/>
+        <attr name="class_dependency_quicktime.app.time.Ticklish" stringvalue="QTCycle"/>
+        <attr name="class_dependency_jm.JMC" stringvalue="QTCycle"/>
+        <attr name="class_dependency_java.awt.event.ActionListener" stringvalue="QTCycle"/>
+    </fileobject>
+</attributes>

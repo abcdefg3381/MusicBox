@@ -1,0 +1,85 @@
+<!-- Project Maggie - MusicBox 2.0 - LIU Xiaofan -->
+<project name="MusicBox" default="run" basedir=".">
+	
+	<import file="../Maggie/build.xml" />
+	
+	<!-- Name of project and version -->
+	<property name="proj.name" value="MusicBox" />
+	<property name="version" value="2.0" />
+
+	<!-- Global properties for this build -->
+	<property name="src.java.dir" value="src" />
+	<property name="src.etc.dir" value="src/etc" />
+	<property name="build.dir" value="build" />
+	<property name="maggie.build" value="../Maggie/build" />
+
+	<!-- Classpath declaration -->
+	<path id="build.classpath">
+		<fileset dir="${build.lib.dir}">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</fileset>
+	</path>
+
+	<!-- Useful shortcuts -->
+	<patternset id="meta.files">
+		<include name="**/*.xml" />
+		<include name="**/*.properties" />
+	</patternset>
+
+	<patternset id="image.files">
+		<include name="**/*.gif" />
+	</patternset>
+
+	<!-- Clean up -->
+	<target name="clean" description="Clean the build directory">
+		<delete dir="${build.dir}" />
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<!-- call Maggie to compile and copy files here -->
+	<target name="maggie" depends="" description="Call Maggie to build">
+		<antcall target="maggie.preamble">
+		</antcall>
+		<copy todir="${build.dir}">
+			<fileset dir="${maggie.build}" />
+		</copy>
+	</target>
+
+	<!-- Compile Java source -->
+	<target name="compile">
+		<mkdir dir="${build.dir}" />
+		<javac srcdir="${src.java.dir}" destdir="${build.dir}" classpathref="maggie.classpath" />
+	</target>
+
+	<!-- Copy metadata to build classpath -->
+	<target name="copymetafiles">
+		<copy todir="${build.dir}">
+			<fileset dir="${src.java.dir}">
+				<patternset refid="image.files" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset dir="${src.etc.dir}">
+				<patternset refid="meta.files" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Run MusicBox -->
+	<target name="run" depends="maggie, compile, copymetafiles" description="Build and run MusicBox">
+		<java fork="true" maxmemory="2048m" classname="musicbox.MainProgram" classpathref="maggie.classpath">
+			<classpath path="${build.dir}" />
+		</java>
+	</target>
+
+	<!-- Start the HSQL DB browser tool -->
+	<target name="dbmanager" depends="maggie" description="Start HSQL DB manager">
+		<java classname="org.hsqldb.util.DatabaseManagerSwing" fork="yes" classpathref="maggie.classpath" failonerror="true">
+			<arg value="-url" />
+			<arg value="jdbc:hsqldb:hsql://localhost/current" />
+			<arg value="-driver" />
+			<arg value="org.hsqldb.jdbcDriver" />
+		</java>
+	</target>
+</project>
